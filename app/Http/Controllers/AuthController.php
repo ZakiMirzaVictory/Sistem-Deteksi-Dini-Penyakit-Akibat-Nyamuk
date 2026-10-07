@@ -17,30 +17,34 @@ class AuthController extends Controller
     }
 
     public function login(Request $request)
-    {
-        $credentials = $request->validate([
-            'identitas' => 'required|string',
-            'password' => 'required|string',
-        ]);
+{
+    $credentials = $request->validate([
+        'identitas' => 'required|string',
+        'password' => 'required|string',
+    ]);
 
-        // Cek login via email atau no_hp
-        $fieldType = filter_var($credentials['identitas'], FILTER_VALIDATE_EMAIL) ? 'email' : 'no_hp';
+    $fieldType = filter_var($credentials['identitas'], FILTER_VALIDATE_EMAIL) ? 'email' : 'no_hp';
 
-        if (Auth::attempt([$fieldType => $credentials['identitas'], 'password' => $credentials['password']], $request->boolean('remember'))) {
-            // Mencegah Session Fixation
-            $request->session()->regenerate();
+    if (Auth::attempt([$fieldType => $credentials['identitas'], 'password' => $credentials['password']])) {
+        $request->session()->regenerate();
 
-            $user = Auth::user();
-            if ($user->role === 'admin') {
-                return redirect()->intended(route('admin.dashboard'));
-            }
+        $user = Auth::user();
 
-            return redirect()->intended(route('masyarakat.dashboard'));
+        // 1. Bersihkan sisa intended URL di session
+        $request->session()->forget('url.intended');
+
+        // 2. Cek role tanpa terpengaruh huruf kapital/spasi dan redirect langsung ke route tujuan
+        if (strtolower(trim($user->role)) === 'admin') {
+            return redirect()->route('admin.dashboard');
         }
 
-        return back()->withInput($request->only('identitas'))
-            ->with('error', 'Email/No HP atau Password yang Anda masukkan salah.');
+        return redirect()->route('masyarakat.dashboard');
     }
+
+    return back()
+        ->withInput($request->only('identitas'))
+        ->with('error', 'Email/No HP atau Password yang Anda masukkan salah.');
+}
 
     public function showRegister()
     {
@@ -50,26 +54,26 @@ class AuthController extends Controller
     }
 
     public function register(Request $request)
-    {
-        $validated = $request->validate([
-            'nama' => 'required|string|max:100',
-            'email' => 'required|email|unique:pengguna,email',
-            'no_hp' => 'required|string|max:20',
-            'alamat' => 'required|string',
-            'password' => 'required|string|min:8',
-        ]);
+{
+    $validated = $request->validate([
+        'nama' => 'required|string|max:100',
+        'email' => 'required|email|unique:pengguna,email',
+        'no_hp' => 'required|string|max:20',
+        'alamat' => 'required|string',
+        'password' => 'required|string|min:8',
+    ]);
 
-        User::create([
-            'nama' => $validated['nama'],
-            'email' => $validated['email'],
-            'no_hp' => $validated['no_hp'],
-            'alamat' => $validated['alamat'],
-            'password' => Hash::make($validated['password']),
-            'role' => 'masyarakat',
-        ]);
+    User::create([
+        'nama' => $validated['nama'],
+        'email' => $validated['email'],
+        'no_hp' => $validated['no_hp'],
+        'alamat' => $validated['alamat'],
+        'password' => Hash::make($validated['password']),
+        'role' => 'user', // Ubah dari 'masyarakat' menjadi 'user'
+    ]);
 
-        return redirect()->route('login')->with('success', 'Registrasi berhasil. Silakan login.');
-    }
+    return redirect()->route('login')->with('success', 'Registrasi berhasil. Silakan login.');
+}
 
     public function logout(Request $request)
     {
