@@ -1,32 +1,48 @@
-@extends('layouts.app')
-
-@section('title', 'Login')
+@extends('layouts.auth')
 
 @section('content')
-<div class="login-card">
-    <h2>Login System</h2>
+<h1 class="auth-title">Deteksi Dini Penyakit<br>Akibat Nyamuk</h1>
 
-    {{-- Menampilkan Error Session dari Controller --}}
-    @if (session('error'))
-        <div class="alert alert-danger">
-            {{ session('error') }}
-        </div>
-    @endif
+@if (session('error'))
+    <div class="alert alert-danger" style="color:red; margin-bottom:12px;">
+        {{ session('error') }}
+    </div>
+@endif
 
-    <form action="{{ route('login.perform') }}" method="POST">
-        @csrf {{-- Wajib untuk proteksi CSRF --}}
+@if (session('success'))
+    <div class="alert alert-success" style="color:green; margin-bottom:12px;">
+        {{ session('success') }}
+    </div>
+@endif
 
-        <div class="form-group">
-            <label for="username">Username</label>
-            <input type="text" id="username" name="username" value="{{ old('username') }}" required autofocus>
-        </div>
+<form action="{{ route('login.perform') }}" method="POST">
+    @csrf
 
-        <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" required>
-        </div>
+    <div class="field">
+        <label for="identitas">Email Atau Nomor HP</label>
+        <input id="identitas" name="identitas" type="text" placeholder="nama@email.com" value="{{ old('identitas') }}" required>
+    </div>
 
-        <button type="submit" class="btn-login">Masuk</button>
-    </form>
-</div>
+    <div class="field" style="margin-bottom:6px;">
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" placeholder="Masukkan password" required>
+    </div>
+
+    <div class="field-row">
+        <label style="display:flex;align-items:center;gap:6px;margin:0;">
+            <input type="checkbox" name="remember" style="width:auto;">
+            Ingat saya
+        </label>
+        <a href="#">Lupa password?</a>
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-block auth-submit">
+        Login
+    </button>
+</form>
+
+<p class="auth-footer">
+    Belum punya akun?
+    <a href="{{ route('register') }}">Daftar</a>
+</p>
 @endsection
