@@ -28,8 +28,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard-masyarakat', [DashboardController::class, 'masyarakat'])->name('masyarakat.dashboard');
     Route::get('/buat-laporan', [LaporanController::class, 'create'])->name('laporan.create');
     Route::post('/buat-laporan', [LaporanController::class, 'store'])->name('laporan.store');
-    Route::get('/laporan-terverifikasi', [LaporanController::class, 'terverifikasi'])->name('laporan.terverifikasi');
-    Route::get('/notifikasi-masyarakat', [DashboardController::class, 'notifikasiMasyarakat'])->name('masyarakat.notifikasi');
+    Route::get('/notifikasi-masyarakat', [DashboardController::class, 'notifikasiMasyarakat'])->name('masyarakat.laporan.notifikasi');
+    Route::get('/laporan-terverifikasi', [DashboardController::class, 'laporanTerverifikasi'])->name('masyarakat.laporan.terverifikasi');
 
     // Portal Admin
     Route::get('/dashboard-admin', [DashboardController::class, 'admin'])->name('admin.dashboard');

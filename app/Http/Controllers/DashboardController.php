@@ -24,10 +24,20 @@ class DashboardController extends Controller
 
     public function notifikasiMasyarakat()
     {
-        return view('masyarakat.notifikasi', [
+        return view('masyarakat.laporan.notifikasi', [
             'pageTitle' => 'Notifikasi — Masyarakat',
             'role' => 'masyarakat',
             'activePage' => 'notifikasi'
         ]);
     }
+
+    public function laporanTerverifikasi()
+    {
+        return view('masyarakat.laporan.terverifikasi', [
+            'pageTitle' => 'Laporan Terverifikasi — Deteksi Dini Nyamuk',
+            'role' => 'masyarakat',
+            'activePage' => 'laporan-terverifikasi' 
+        ]);
+    }
+
 }

@@ -41,11 +41,11 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg>
             Buat Laporan
         </a>
-        <a class="nav-item {{ ($activePage ?? '') === 'laporan-terverifikasi' ? 'active' : '' }}" href="{{ route('laporan.terverifikasi') }}">
+        <a class="nav-item {{ ($activePage ?? '') === 'laporan-terverifikasi' ? 'active' : '' }}" href="{{ route('masyarakat.laporan.terverifikasi') }}">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
             Laporan Terverifikasi
         </a>
-        <a class="nav-item {{ ($activePage ?? '') === 'notifikasi' ? 'active' : '' }}" href="{{ route('masyarakat.notifikasi') }}">
+        <a class="nav-item {{ ($activePage ?? '') === 'notifikasi' ? 'active' : '' }}" href="{{ route('masyarakat.laporan.notifikasi') }}">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
             Notifikasi
         </a>
