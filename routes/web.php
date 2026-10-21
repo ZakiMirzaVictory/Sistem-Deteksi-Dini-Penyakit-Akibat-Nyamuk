@@ -33,7 +33,7 @@ Route::middleware('auth')->group(function () {
 
     // Portal Admin
     Route::get('/dashboard-admin', [DashboardController::class, 'admin'])->name('admin.dashboard');
-    Route::get('/kelola-pengguna', [AdminController::class, 'kelolaPengguna'])->name('admin.pengguna');
+    Route::get('/kelola-pengguna', [AdminController::class, 'kelolaPengguna'])->name('admin.pengguna.index');
     Route::get('/verifikasi-laporan', [AdminController::class, 'verifikasiLaporan'])->name('admin.laporan.verifikasi');
     Route::post('/verifikasi-laporan/{id}', [AdminController::class, 'prosesVerifikasi'])->name('admin.laporan.proses');
     Route::get('/notifikasi-admin', [AdminController::class, 'notifikasiAdmin'])->name('admin.notifikasi');

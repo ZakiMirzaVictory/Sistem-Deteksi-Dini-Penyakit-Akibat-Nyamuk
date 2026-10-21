@@ -13,7 +13,11 @@
 
     <div class="field">
         <label for="email">Email</label>
-        <input id="email" name="email" type="email" placeholder="nama@email.com" value="{{ old('email') }}" required>
+        {{-- Tambahkan class error dan tampilkan pesan error email --}}
+        <input id="email" name="email" type="email" placeholder="nama@email.com" value="{{ old('email') }}" class="@error('email') is-invalid @enderror" required>
+        @error('email')
+            <span class="text-danger" style="color: red; font-size: 12px;">{{ $message }}</span>
+        @enderror
     </div>
 
     <div class="field">
@@ -28,7 +32,11 @@
 
     <div class="field">
         <label for="password">Password</label>
-        <input id="password" name="password" type="password" placeholder="Minimal 8 karakter" required>
+        {{-- Tambahkan class error dan tampilkan pesan error password --}}
+        <input id="password" name="password" type="password" placeholder="Minimal 8 karakter" class="@error('password') is-invalid @enderror" required>
+        @error('password')
+            <span class="text-danger" style="color: red; font-size: 12px;">{{ $message }}</span>
+        @enderror
     </div>
 
     <button type="submit" class="btn btn-primary btn-block auth-submit">
