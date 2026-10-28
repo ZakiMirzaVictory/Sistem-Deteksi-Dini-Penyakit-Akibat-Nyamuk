@@ -37,4 +37,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/verifikasi-laporan', [AdminController::class, 'verifikasiLaporan'])->name('admin.laporan.verifikasi');
     Route::post('/verifikasi-laporan/{id}', [AdminController::class, 'prosesVerifikasi'])->name('admin.laporan.proses');
     Route::get('/notifikasi-admin', [AdminController::class, 'notifikasiAdmin'])->name('admin.notifikasi');
+
+    // Menampilkan halaman edit pengguna
+    Route::get('/kelola-pengguna/{id}/edit', [AdminController::class, 'editPengguna'])->name('admin.pengguna.edit');
+
+    // Memproses penyimpanan perubahan data (Update)
+    Route::put('/kelola-pengguna/{id}', [AdminController::class, 'updatePengguna'])->name('admin.pengguna.update');
+
+    // Menghapus data pengguna (Delete)
+    Route::delete('/kelola-pengguna/{id}', [AdminController::class, 'hapusPengguna'])->name('admin.pengguna.destroy');
 });

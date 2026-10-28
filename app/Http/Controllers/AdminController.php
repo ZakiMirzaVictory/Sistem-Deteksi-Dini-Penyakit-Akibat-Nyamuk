@@ -42,4 +42,48 @@ class AdminController extends Controller
             'activePage' => 'notifikasi'
         ]);
     }
+
+    // 1. Menampilkan halaman form edit berdasarkan id_user
+    public function editPengguna($id)
+    {
+        $pengguna = Pengguna::where('id_user', $id)->firstOrFail();
+
+        return view('admin.pengguna.edit', [
+            'pageTitle' => 'Edit Pengguna — Portal Admin',
+            'role' => 'admin',
+            'activePage' => 'kelola-pengguna',
+            'pengguna' => $pengguna
+        ]);
+    }
+
+    // 2. Menyimpan perubahan data ke database
+    public function updatePengguna(Request $request, $id)
+    {
+        $pengguna = Pengguna::where('id_user', $id)->firstOrFail();
+
+        $request->validate([
+            'nama'   => 'required|string|max:255',
+            'email'  => 'required|email|max:255',
+            'no_hp'  => 'nullable|string|max:20',
+            'role'   => 'required|string',
+        ]);
+
+        $pengguna->update([
+            'nama'  => $request->nama,
+            'email' => $request->email,
+            'no_hp' => $request->no_hp,
+            'role'  => $request->role,
+        ]);
+
+        return redirect()->route('admin.pengguna.index')->with('success', 'Data pengguna berhasil diperbarui!');
+    }
+
+    // 3. Menghapus data pengguna
+    public function hapusPengguna($id)
+    {
+        $pengguna = Pengguna::where('id_user', $id)->firstOrFail();
+        $pengguna->delete();
+
+        return redirect()->route('admin.pengguna.index')->with('success', 'Pengguna berhasil dihapus!');
+    }
 }

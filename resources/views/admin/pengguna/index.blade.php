@@ -51,13 +51,20 @@
                         @endif
                     </td>
                     <td>
-                        <a href="#" style="color:var(--primary);font-weight:600;margin-right:12px;">
-                            Edit
-                        </a>
-                        <a href="#" style="color:var(--primary-dark);font-weight:600;">
+                    <!-- Tombol Edit -->
+                    <a href="{{ route('admin.pengguna.edit', $pengguna->id_user) }}" style="color:var(--primary);font-weight:600;margin-right:12px;">
+                        Edit
+                    </a>
+
+                    <!-- Tombol Hapus (Menggunakan Form DELETE agar aman) -->
+                    <form action="{{ route('admin.pengguna.destroy', $pengguna->id_user) }}" method="POST" style="display:inline;" onsubmit="return confirm('Yakin ingin menghapus pengguna ini?');">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" style="background:none; border:none; color:var(--primary-dark); font-weight:600; cursor:pointer; padding:0;">
                             Hapus
-                        </a>
-                    </td>
+                        </button>
+                    </form>
+                   </td>
                 </tr>
                 @empty
                 <tr>
