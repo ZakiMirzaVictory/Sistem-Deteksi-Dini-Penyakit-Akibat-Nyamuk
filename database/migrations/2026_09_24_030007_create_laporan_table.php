@@ -9,23 +9,20 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
-    {
-        Schema::create('laporan', function (Blueprint $table) {
-           $table->integer('id_laporan')->autoIncrement();
-            $table->integer('id_user');
-            $table->date('tanggal');
-            $table->string('lokasi', 255);
-            $table->string('gejala', 255);
-            $table->text('deskripsi')->nullable();
-            $table->string('foto', 255)->nullable();
-            $table->enum('status', ['menunggu', 'diproses', 'selesai', 'ditolak'])->default('menunggu');
-            $table->timestamps();
-
-            // Foreign Key
-            $table->foreign('id_user')->references('id_user')->on('pengguna')->onDelete('cascade');
-        });
-    }
+    public function up()
+{
+    Schema::create('laporans', function (Blueprint $table) {
+        $table->id();
+        $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); // Relasi ke pelapor (opsional jika sistem harus login)
+        $table->string('lokasi');
+        $table->string('jenis_penyakit');
+        $table->text('gejala');
+        $table->text('kondisi_lingkungan');
+        $table->string('foto')->nullable(); // Foto opsional
+        $table->string('status')->default('menunggu'); // Status default: menunggu, terverifikasi, ditolak
+        $table->timestamps();
+    });
+}
 
     /**
      * Reverse the migrations.

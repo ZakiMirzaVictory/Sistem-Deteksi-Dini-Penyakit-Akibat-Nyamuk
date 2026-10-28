@@ -10,42 +10,39 @@
 
 <div class="card" style="max-width:640px;">
     <form action="{{ route('laporan.store') }}" method="POST" enctype="multipart/form-data">
-        @csrf
+    @csrf
 
-        <div class="field">
-            <label for="lokasi">Lokasi Kejadian *</label>
-            <input type="text" id="lokasi" name="lokasi" placeholder="Masukkan alamat lengkap lokasi kejadian" required>
-        </div>
+    <!-- Tanggal -->
+    <div>
+        <label for="tanggal">Tanggal Kejadian</label>
+        <input type="date" id="tanggal" name="tanggal" value="{{ date('Y-m-d') }}" required>
+    </div>
 
-        <div class="field">
-            <label for="jenis_penyakit">Jenis Penyakit *</label>
-            <select id="jenis_penyakit" name="jenis_penyakit" required>
-                <option value="">Pilih jenis penyakit</option>
-                <option value="DBD">Demam Berdarah Dengue (DBD)</option>
-                <option value="Malaria">Malaria</option>
-                <option value="Chikungunya">Chikungunya</option>
-            </select>
-        </div>
+    <!-- Lokasi -->
+    <div>
+        <label for="lokasi">Lokasi</label>
+        <input type="text" id="lokasi" name="lokasi" required>
+    </div>
 
-        <div class="field">
-            <label for="gejala">Gejala yang Dialami *</label>
-            <textarea id="gejala" name="gejala" rows="3" placeholder="Deskripsikan gejala yang dialami" required></textarea>
-        </div>
+    <!-- Gejala -->
+    <div>
+        <label for="gejala">Gejala</label>
+        <input type="text" id="gejala" name="gejala" required>
+    </div>
 
-        <div class="field">
-            <label for="kondisi_lingkungan">Kondisi Lingkungan *</label>
-            <textarea id="kondisi_lingkungan" name="kondisi_lingkungan" rows="3" placeholder="Deskripsikan kondisi lingkungan sekitar" required></textarea>
-        </div>
+    <!-- Deskripsi -->
+    <div>
+        <label for="deskripsi">Deskripsi Laporan</label>
+        <textarea id="deskripsi" name="deskripsi" rows="4" required></textarea>
+    </div>
 
-        <div class="field">
-            <label for="foto">Foto Pendukung (Opsional)</label>
-            <input type="file" id="foto" name="foto" accept="image/png, image/jpeg, image/jpg">
-        </div>
+    <!-- Foto -->
+    <div>
+        <label for="foto">Unggah Foto (Opsional)</label>
+        <input type="file" id="foto" name="foto" accept="image/*">
+    </div>
 
-        <div style="display:flex;gap:10px;margin-top:6px;">
-            <button type="submit" class="btn btn-primary">Kirim Laporan</button>
-            <a href="{{ route('masyarakat.dashboard') }}" class="btn btn-ghost">Batal</a>
-        </div>
-    </form>
+    <button type="submit">Kirim Laporan</button>
+</form>
 </div>
 @endsection
