@@ -3,15 +3,19 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Pengguna;
 
 class AdminController extends Controller
 {
     public function kelolaPengguna()
     {
+        $data_pengguna = Pengguna::all();
+
         return view('admin.pengguna.index', [
             'pageTitle' => 'Kelola Pengguna — Portal Admin',
             'role' => 'admin',
-            'activePage' => 'kelola-pengguna'
+            'activePage' => 'kelola-pengguna', 
+            'data_pengguna' => $data_pengguna
         ]);
     }
 

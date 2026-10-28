@@ -1,114 +1,75 @@
 @extends('layouts.app')
 
 @section('content')
+
 <div class="page-head">
-    <div class="page-head-icon">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M9 12l2 2 4-4"/>
-            <rect x="3" y="4" width="18" height="16" rx="2"/>
-        </svg>
-    </div>
     <div>
-        <h1>Verifikasi Laporan</h1>
-        <p>Tinjau dan verifikasi laporan dari masyarakat.</p>
+        <h1>Kelola Pengguna</h1>
+        <p>Manajemen data seluruh pengguna sistem.</p>
     </div>
 </div>
 
-<div class="tabs">
-    <a href="#" class="tab active">Menunggu Verifikasi (8)</a>
-    <a href="#" class="tab">Terverifikasi (36)</a>
-    <a href="#" class="tab">Ditolak (3)</a>
-</div>
+<div class="card">
 
-<div class="card" style="margin-bottom:18px;">
+    <div class="toolbar">
+        <div class="search-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="7"/>
+                <path d="M21 21l-4.3-4.3"/>
+            </svg>
+            <input type="text" placeholder="Cari berdasarkan nama atau email...">
+        </div>
+
+        <button class="btn btn-primary btn-sm">
+            + Tambah Pengguna
+        </button>
+    </div>
+
     <div class="table-wrap">
         <table>
             <thead>
                 <tr>
-                    <th>Pelapor</th>
-                    <th>Lokasi</th>
-                    <th>Jenis Penyakit</th>
-                    <th>Tanggal</th>
+                    <th>Nama</th>
+                    <th>Email</th>
+                    <th>No. HP</th>
+                    <th>Role</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
             <tbody>
+                <!-- Perulangan data dari database Aiven -->
+                @forelse($data_pengguna as $pengguna)
                 <tr>
-                    <td>Wahyu Zizi</td>
-                    <td>Jl. Mawar No. 5</td>
-                    <td>DBD</td>
-                    <td>01 Jun 2026</td>
+                    <td>{{ $pengguna->nama }}</td>
+                    <td>{{ $pengguna->email }}</td>
+                    <td>{{ $pengguna->no_hp ?? '-' }}</td>
                     <td>
-                        <button type="button" class="btn btn-outline btn-sm" style="border-color:var(--success);color:var(--success);margin-right:6px;">
-                            Verifikasi
-                        </button>
-                        <button type="button" class="btn btn-outline btn-sm" style="border-color:var(--primary-dark);color:var(--primary-dark);">
-                            Tolak
-                        </button>
+                        @if($pengguna->role == 'admin')
+                            <span class="badge badge-success">Admin</span>
+                        @else
+                            <span class="badge badge-muted">Masyarakat</span>
+                        @endif
+                    </td>
+                    <td>
+                        <a href="#" style="color:var(--primary);font-weight:600;margin-right:12px;">
+                            Edit
+                        </a>
+                        <a href="#" style="color:var(--primary-dark);font-weight:600;">
+                            Hapus
+                        </a>
                     </td>
                 </tr>
+                @empty
                 <tr>
-                    <td>Budi Santoso</td>
-                    <td>Kel. Pandean</td>
-                    <td>Malaria</td>
-                    <td>31 Mei 2026</td>
-                    <td>
-                        <button type="button" class="btn btn-outline btn-sm" style="border-color:var(--success);color:var(--success);margin-right:6px;">
-                            Verifikasi
-                        </button>
-                        <button type="button" class="btn btn-outline btn-sm" style="border-color:var(--primary-dark);color:var(--primary-dark);">
-                            Tolak
-                        </button>
+                    <td colspan="5" style="text-align: center; color: #64748b; padding: 20px;">
+                        Belum ada data pengguna di database.
                     </td>
                 </tr>
+                @endforelse
             </tbody>
         </table>
     </div>
+
 </div>
 
-<div class="card" style="max-width:640px;">
-    <h3 style="font-size:14.5px;margin-bottom:12px;">
-        Detail Laporan — Wahyu Zizi
-    </h3>
-
-    <div class="detail-grid">
-        <div class="detail-item">
-            <div class="k">PELAPOR</div>
-            <div class="v">Wahyu Zizi</div>
-        </div>
-        <div class="detail-item">
-            <div class="k">TANGGAL</div>
-            <div class="v">01 Juni 2026</div>
-        </div>
-        <div class="detail-item">
-            <div class="k">LOKASI</div>
-            <div class="v">Jl. Mawar No. 5, Madiun</div>
-        </div>
-        <div class="detail-item">
-            <div class="k">JENIS PENYAKIT</div>
-            <div class="v">DBD</div>
-        </div>
-    </div>
-
-    <div class="detail-item" style="margin-bottom:14px;">
-        <div class="k">GEJALA</div>
-        <div class="v">
-            Demam tinggi 39°C, nyeri sendi, bintik merah di kulit
-        </div>
-    </div>
-
-    <div class="field">
-        <label for="tindakan">Tindakan Penanganan</label>
-        <textarea id="tindakan" rows="3" placeholder="Isi tindakan penanganan yang dilakukan..."></textarea>
-    </div>
-
-    <div style="display:flex;gap:10px;">
-        <button type="button" class="btn btn-primary">
-            Verifikasi Laporan
-        </button>
-        <button type="button" class="btn btn-ghost">
-            Tolak Laporan
-        </button>
-    </div>
-</div>
 @endsection
