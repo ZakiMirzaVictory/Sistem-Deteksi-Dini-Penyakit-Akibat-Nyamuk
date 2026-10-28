@@ -46,4 +46,10 @@ Route::middleware('auth')->group(function () {
 
     // Menghapus data pengguna (Delete)
     Route::delete('/kelola-pengguna/{id}', [AdminController::class, 'hapusPengguna'])->name('admin.pengguna.destroy');
+
+    // Menampilkan form tambah pengguna
+Route::get('/kelola-pengguna/create', [AdminController::class, 'tambahPengguna'])->name('admin.pengguna.create');
+
+// Menyimpan data pengguna baru ke database
+Route::post('/kelola-pengguna', [AdminController::class, 'simpanPengguna'])->name('admin.pengguna.store');
 });

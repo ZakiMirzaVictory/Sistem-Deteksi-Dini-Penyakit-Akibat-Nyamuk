@@ -20,9 +20,9 @@
             <input type="text" placeholder="Cari berdasarkan nama atau email...">
         </div>
 
-        <button class="btn btn-primary btn-sm">
-            + Tambah Pengguna
-        </button>
+        <a href="{{ route('admin.pengguna.create') }}" class="btn btn-primary btn-sm" style="text-decoration: none;">
+    + Tambah Pengguna
+        </a>
     </div>
 
     <div class="table-wrap">

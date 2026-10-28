@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Pengguna;
+use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
@@ -85,5 +86,38 @@ class AdminController extends Controller
         $pengguna->delete();
 
         return redirect()->route('admin.pengguna.index')->with('success', 'Pengguna berhasil dihapus!');
+    }
+    // 1. Menampilkan halaman form tambah pengguna
+    public function tambahPengguna()
+    {
+        return view('admin.pengguna.create', [
+            'pageTitle' => 'Tambah Pengguna Baru — Portal Admin',
+            'role' => 'admin',
+            'activePage' => 'kelola-pengguna',
+        ]);
+    }
+
+    // 2. Menyimpan data pengguna baru ke database Aiven
+    public function simpanPengguna(Request $request)
+    {
+        $request->validate([
+            'nama'     => 'required|string|max:255',
+            'email'    => 'required|email|unique:pengguna,email|max:255',
+            'password' => 'required|string|min:6',
+            'no_hp'    => 'nullable|string|max:20',
+            'alamat'   => 'nullable|string',
+            'role'     => 'required|string',
+        ]);
+
+        Pengguna::create([
+            'nama'     => $request->nama,
+            'email'    => $request->email,
+            'password' => Hash::make($request->password), // Enskripsi password agar aman
+            'no_hp'    => $request->no_hp,
+            'alamat'   => $request->alamat,
+            'role'     => $request->role,
+        ]);
+
+        return redirect()->route('admin.pengguna.index')->with('success', 'Pengguna baru berhasil ditambahkan!');
     }
 }
