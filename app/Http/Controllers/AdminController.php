@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Pengguna;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Laporan;
 
 class AdminController extends Controller
 {
@@ -20,14 +21,7 @@ class AdminController extends Controller
         ]);
     }
 
-    public function verifikasiLaporan()
-    {
-        return view('admin.laporan.verifikasi', [
-            'pageTitle' => 'Verifikasi Laporan — Portal Admin',
-            'role' => 'admin',
-            'activePage' => 'verifikasi-laporan'
-        ]);
-    }
+
 
     public function prosesVerifikasi(Request $request, $id)
     {
@@ -119,5 +113,35 @@ class AdminController extends Controller
         ]);
 
         return redirect()->route('admin.pengguna.index')->with('success', 'Pengguna baru berhasil ditambahkan!');
+    }
+
+    // 1. Menampilkan daftar laporan masuk di halaman verifikasi
+    public function verifikasiLaporan()
+    {
+        // Ambil semua data laporan, bisa diurutkan dari yang terbaru
+        $laporan = Laporan::with('user')->orderBy('created_at', 'desc')->get();
+
+        return view('admin.laporan.verifikasi', [
+            'pageTitle' => 'Verifikasi Laporan — Portal Admin',
+            'role' => 'admin',
+            'activePage' => 'verifikasi-laporan',
+            'laporan' => $laporan
+        ]);
+    }
+
+    // 2. Memproses perubahan status (Terima / Tolak)
+    public function updateStatusLaporan(Request $request, $id)
+    {
+        $laporan = Laporan::findOrFail($id);
+
+        $request->validate([
+            'status' => 'required|in:terverifikasi,ditolak,pending',
+        ]);
+
+        $laporan->update([
+            'status' => $request->status
+        ]);
+
+        return redirect()->back()->with('success', 'Status laporan berhasil diperbarui!');
     }
 }

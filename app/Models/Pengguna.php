@@ -20,4 +20,11 @@ class Pengguna extends Model
         'alamat',
         'no_hp',
     ];
+
+    // TAMBAHKAN FUNGSI RELASI INI
+    public function user()
+    {
+        // Menghubungkan id_user di tabel laporan dengan id_user di tabel pengguna
+        return $this->belongsTo(Pengguna::class, 'id_user', 'id_user');
+    }
 }

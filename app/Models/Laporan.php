@@ -20,4 +20,11 @@ class Laporan extends Model
         'foto',
         'status',
     ];
+
+    // Relasi dengan model Pengguna
+    public function user()
+    {
+        return $this->belongsTo(Pengguna::class, 'id_user', 'id_user');
+    }   
+
 }

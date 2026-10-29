@@ -52,4 +52,7 @@ Route::get('/kelola-pengguna/create', [AdminController::class, 'tambahPengguna']
 
 // Menyimpan data pengguna baru ke database
 Route::post('/kelola-pengguna', [AdminController::class, 'simpanPengguna'])->name('admin.pengguna.store');
+
+// Memproses aksi verifikasi (Terima atau Tolak)
+Route::put('/laporan/{id}/status', [AdminController::class, 'updateStatusLaporan'])->name('admin.laporan.status');
 });
