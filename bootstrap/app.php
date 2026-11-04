@@ -11,12 +11,11 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        // Atur aturan redirect bawaan Laravel
-        $middleware->redirectTo(
-            guests: '/login',                // Jika BELUM login -> arahkan ke /login
-            users: '/dashboard-masyarakat'   // Jika SUDAH login tapi buka /login -> arahkan ke dashboard
-        );
-    })
+    $middleware->alias([
+        'prevent-back-history' => \App\Http\Middleware\PreventBackHistory::class,
+        'role' => \App\Http\Middleware\RoleMiddleware::class, // Tambahkan ini
+    ]);
+})
     ->withExceptions(function (Exceptions $exceptions) {
         //
     })->create();

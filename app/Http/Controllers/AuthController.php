@@ -20,30 +20,30 @@ class AuthController extends Controller
 {
     $credentials = $request->validate([
         'identitas' => 'required|string',
-        'password' => 'required|string',
+        'password'  => 'required|string',
     ]);
 
+    // Deteksi login menggunakan Email atau No HP
     $fieldType = filter_var($credentials['identitas'], FILTER_VALIDATE_EMAIL) ? 'email' : 'no_hp';
 
     if (Auth::attempt([$fieldType => $credentials['identitas'], 'password' => $credentials['password']])) {
         $request->session()->regenerate();
-
-        $user = Auth::user();
-
-        // 1. Bersihkan sisa intended URL di session
         $request->session()->forget('url.intended');
 
-        // 2. Cek role tanpa terpengaruh huruf kapital/spasi dan redirect langsung ke route tujuan
-        if (strtolower(trim($user->role)) === 'admin') {
+
+        $userRole = strtolower(trim(Auth::user()->role));
+
+        if ($userRole === 'admin') {
             return redirect()->route('admin.dashboard');
+        } elseif ($userRole === 'user') {
+            return redirect()->route('masyarakat.dashboard');
         }
 
-        return redirect()->route('masyarakat.dashboard');
+        Auth::logout();
+        return back()->withErrors(['identitas' => 'Role pengguna tidak valid.']);
     }
 
-    return back()
-        ->withInput($request->only('identitas'))
-        ->with('error', 'Email/No HP atau Password yang Anda masukkan salah.');
+    return back()->withErrors(['identitas' => 'Email/No HP atau password salah.']);
 }
 
     public function showRegister()

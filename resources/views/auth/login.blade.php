@@ -3,6 +3,17 @@
 @section('content')
 <h1 class="auth-title">Deteksi Dini Penyakit<br>Akibat Nyamuk</h1>
 
+<!-- Menampilkan semua error di bagian atas form -->
+@if ($errors->any())
+    <div style="color: red; background-color: #fee2e2; padding: 10px; border-radius: 5px; margin-bottom: 15px;">
+        <ul style="margin: 0; padding-left: 20px;">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
 @if (session('error'))
     <div class="alert alert-danger" style="color:red; margin-bottom:12px;">
         {{ session('error') }}
