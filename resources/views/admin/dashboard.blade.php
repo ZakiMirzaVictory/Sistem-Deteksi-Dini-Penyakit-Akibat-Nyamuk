@@ -7,32 +7,32 @@
     </div>
     <div>
         <h1>Dashboard Admin</h1>
-        <p>Selamat datang, Administrator</p>
+        <p>Selamat datang, {{ auth()->user()->name ?? 'Administrator' }}</p>
     </div>
 </div>
 
 <div class="stats-grid">
     <div class="stat-card">
         <span class="label">Total Pengguna</span>
-        <div class="stat-value">128</div>
+        <div class="stat-value">{{ number_format($stats['total_pengguna']) }}</div>
         <div class="stat-note">Terdaftar</div>
     </div>
 
     <div class="stat-card">
         <span class="label">Total Laporan</span>
-        <div class="stat-value">47</div>
+        <div class="stat-value">{{ number_format($stats['total_laporan']) }}</div>
         <div class="stat-note">Semua laporan</div>
     </div>
 
     <div class="stat-card">
         <span class="label">Menunggu Verifikasi</span>
-        <div class="stat-value" style="color:var(--warn);">8</div>
+        <div class="stat-value" style="color:var(--warn);">{{ number_format($stats['pending']) }}</div>
         <div class="stat-note">Pending</div>
     </div>
 
     <div class="stat-card">
         <span class="label">Terverifikasi</span>
-        <div class="stat-value" style="color:var(--success);">36</div>
+        <div class="stat-value" style="color:var(--success);">{{ number_format($stats['terverifikasi']) }}</div>
         <div class="stat-note">Diproses</div>
     </div>
 </div>
@@ -51,20 +51,27 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>Wahyu Zizi</td>
-                    <td>Jl. Mawar No. 5</td>
-                    <td>DBD</td>
-                    <td>01 Jun 2026</td>
-                    <td><span class="badge badge-warn">Pending</span></td>
-                </tr>
-                <tr>
-                    <td>Budi Santoso</td>
-                    <td>Kel. Pandean</td>
-                    <td>Malaria</td>
-                    <td>31 Mei 2026</td>
-                    <td><span class="badge badge-warn">Pending</span></td>
-                </tr>
+                @forelse ($laporanTerbaru as $laporan)
+                    <tr>
+                        <td>{{ $laporan->user->nama ?? '-' }}</td>
+                        <td>{{ $laporan->lokasi }}</td>
+                        <td>{{ $laporan->jenis_penyakit }}</td>
+                        <td>{{ $laporan->created_at->translatedFormat('d M Y') }}</td>
+                        <td>
+                            @if ($laporan->status === 'pending')
+                                <span class="badge badge-warn">Pending</span>
+                            @elseif ($laporan->status === 'terverifikasi')
+                                <span class="badge badge-success">Terverifikasi</span>
+                            @else
+                                <span class="badge">{{ ucfirst($laporan->status) }}</span>
+                            @endif
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="5" style="text-align:center;padding:16px;">Belum ada laporan masuk.</td>
+                    </tr>
+                @endforelse
             </tbody>
         </table>
     </div>

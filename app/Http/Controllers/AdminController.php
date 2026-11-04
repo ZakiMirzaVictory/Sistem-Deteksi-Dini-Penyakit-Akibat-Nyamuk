@@ -9,6 +9,28 @@ use App\Models\Laporan;
 
 class AdminController extends Controller
 {
+    public function dashboard()
+{
+    $stats = [
+        'total_pengguna' => Pengguna::count(),
+        'total_laporan'  => Laporan::count(),
+        'pending'        => Laporan::where('status', 'pending')->count(),
+        'terverifikasi'  => Laporan::where('status', 'terverifikasi')->count(),
+    ];
+
+    $laporanTerbaru = Laporan::with('user')
+        ->latest()
+        ->take(5)
+        ->get();
+
+    return view('admin.dashboard', [
+        'pageTitle'      => 'Dashboard Admin — Deteksi Dini Nyamuk',
+        'role'           => 'admin',
+        'activePage'     => 'dashboard',
+        'stats'          => $stats,
+        'laporanTerbaru' => $laporanTerbaru,
+    ]);
+}
     public function kelolaPengguna()
     {
         $data_pengguna = Pengguna::all();

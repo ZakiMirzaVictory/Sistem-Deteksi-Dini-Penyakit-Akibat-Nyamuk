@@ -55,7 +55,7 @@ Route::middleware(['auth', 'prevent-back-history'])->group(function () {
     // GRUP ROUTE KHUSUS ADMIN
     // ------------------------------------------
     Route::middleware('role:admin')->group(function () {
-        Route::get('/dashboard-admin', [DashboardController::class, 'admin'])->name('admin.dashboard');
+        Route::get('/dashboard-admin', [AdminController::class, 'dashboard'])->name('admin.dashboard');
         
         Route::get('/kelola-pengguna/create', [AdminController::class, 'tambahPengguna'])->name('admin.pengguna.create');
         Route::post('/kelola-pengguna', [AdminController::class, 'simpanPengguna'])->name('admin.pengguna.store');
