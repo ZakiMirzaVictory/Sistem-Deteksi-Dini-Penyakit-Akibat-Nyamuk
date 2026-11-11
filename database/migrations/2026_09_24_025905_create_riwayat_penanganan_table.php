@@ -6,29 +6,28 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
+        // Lewati kalau tabel sudah ada
+        if (Schema::hasTable('riwayat_penanganan')) {
+            return;
+        }
+
         Schema::create('riwayat_penanganan', function (Blueprint $table) {
-           $table->integer('id_penanganan')->autoIncrement();
-            $table->integer('id_laporan');
-            $table->integer('id_admin');
+            $table->id('id_penanganan');
+            $table->unsignedBigInteger('id_laporan');   // sama dengan laporan.id (bigint unsigned)
+            $table->integer('id_admin');                // sama dengan pengguna.id_user (int)
             $table->text('tindakan');
             $table->text('keterangan')->nullable();
             $table->date('tanggal');
             $table->timestamps();
 
             // Foreign Keys
-            $table->foreign('id_laporan')->references('id_laporan')->on('laporan')->onDelete('cascade');
+            $table->foreign('id_laporan')->references('id')->on('laporan')->onDelete('cascade');
             $table->foreign('id_admin')->references('id_user')->on('pengguna')->onDelete('cascade');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('riwayat_penanganan');

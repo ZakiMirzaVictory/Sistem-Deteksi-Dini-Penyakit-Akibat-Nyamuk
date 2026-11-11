@@ -10,16 +10,8 @@ class Laporan extends Model
     use HasFactory;
 
     protected $table = 'laporan';
+    protected $fillable = ['id_user', 'tanggal', 'lokasi', 'gejala', 'deskripsi', 'foto', 'status'];
 
-    protected $fillable = [
-        'id_user',
-        'tanggal',
-        'lokasi',
-        'gejala',
-        'deskripsi',
-        'foto',
-        'status',
-    ];
 
     // Relasi dengan model Pengguna
     public function user()

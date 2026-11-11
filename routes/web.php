@@ -39,16 +39,21 @@ Route::middleware(['auth', 'prevent-back-history'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     // ------------------------------------------
-    // GRUP ROUTE KHUSUS MASYARAKAT
-    // ------------------------------------------
-    Route::middleware('role:masyarakat')->group(function () {
-        Route::get('/dashboard-masyarakat', [DashboardController::class, 'masyarakat'])->name('masyarakat.dashboard');
-        
-        Route::get('/buat-laporan', [LaporanController::class, 'create'])->name('laporan.create');
-        Route::post('/buat-laporan', [LaporanController::class, 'store'])->name('laporan.store');
-        
-        Route::get('/notifikasi-masyarakat', [DashboardController::class, 'notifikasiMasyarakat'])->name('masyarakat.laporan.notifikasi');
-        Route::get('/laporan-terverifikasi', [DashboardController::class, 'laporanTerverifikasi'])->name('masyarakat.laporan.terverifikasi');
+// GRUP ROUTE KHUSUS MASYARAKAT
+// ------------------------------------------
+Route::middleware('role:masyarakat')->group(function () {
+    Route::get('/dashboard-masyarakat', [DashboardController::class, 'masyarakat'])->name('masyarakat.dashboard');
+    
+    Route::get('/buat-laporan', [LaporanController::class, 'create'])->name('laporan.create');
+    Route::post('/buat-laporan', [LaporanController::class, 'store'])->name('laporan.store');
+    
+    // Route untuk menampilkan halaman notifikasi
+    Route::get('/notifikasi-masyarakat', [DashboardController::class, 'notifikasiMasyarakat'])->name('masyarakat.laporan.notifikasi');
+    
+    // TAMBAHKAN BARIS INI: Route untuk fitur "Tandai Dibaca"
+    Route::post('/notifikasi-masyarakat/tandai-dibaca', [DashboardController::class, 'tandaiSemuaDibaca'])->name('masyarakat.notifikasi.read_all');
+    
+    Route::get('/laporan-terverifikasi', [DashboardController::class, 'laporanTerverifikasi'])->name('masyarakat.laporan.terverifikasi');
     });
 
     // ------------------------------------------
@@ -68,6 +73,8 @@ Route::middleware(['auth', 'prevent-back-history'])->group(function () {
         Route::get('/verifikasi-laporan', [AdminController::class, 'verifikasiLaporan'])->name('admin.laporan.verifikasi');
         Route::post('/verifikasi-laporan/{id}', [AdminController::class, 'prosesVerifikasi'])->name('admin.laporan.proses');
         Route::put('/laporan/{id}/status', [AdminController::class, 'updateStatusLaporan'])->name('admin.laporan.status');
+        // Route untuk tiket KF-4.4 (Tombol Terima / Tolak)
+        Route::put('/admin/laporan/{id}/status', [LaporanController::class, 'updateStatus'])->name('admin.laporan.status');
         
         Route::get('/notifikasi-admin', [AdminController::class, 'notifikasiAdmin'])->name('admin.notifikasi');
     });

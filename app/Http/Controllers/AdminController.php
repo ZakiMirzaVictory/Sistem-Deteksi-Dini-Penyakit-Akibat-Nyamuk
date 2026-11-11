@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\Pengguna;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Laporan;
+use App\Models\Notifikasi;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
@@ -153,17 +156,44 @@ class AdminController extends Controller
 
     // 2. Memproses perubahan status (Terima / Tolak)
     public function updateStatusLaporan(Request $request, $id)
-    {
-        $laporan = Laporan::findOrFail($id);
+{
+    $request->validate([
+        'status' => 'required|in:terverifikasi,ditolak',
+        'alasan' => 'required_if:status,ditolak|nullable|string|max:500',
+    ], [
+        'alasan.required_if' => 'Alasan penolakan wajib diisi.',
+    ]);
 
-        $request->validate([
-            'status' => 'required|in:terverifikasi,ditolak,pending',
-        ]);
+    $laporan = Laporan::findOrFail($id);
 
-        $laporan->update([
-            'status' => $request->status
-        ]);
-
-        return redirect()->back()->with('success', 'Status laporan berhasil diperbarui!');
+    if ($laporan->status !== 'pending') {
+        return back()->with('error', 'Laporan ini sudah diproses sebelumnya.');
     }
-}
+
+    $diverifikasi = $request->status === 'terverifikasi';
+
+    DB::transaction(function () use ($request, $laporan, $diverifikasi) {
+        $laporan->update(['status' => $request->status]);
+
+        RiwayatPenanganan::create([
+            'id_laporan' => $laporan->id,
+            'id_admin'   => Auth::user()->id_user,
+            'tindakan'   => $diverifikasi ? 'Laporan diverifikasi' : 'Laporan ditolak',
+            'keterangan' => $diverifikasi ? null : $request->alasan,
+            'tanggal'    => now()->toDateString(),
+        ]);
+
+        Notifikasi::create([
+            'id_user'    => $laporan->id_user,
+            'id_laporan' => $laporan->id,
+            'pesan'      => $diverifikasi
+                ? 'Laporan Anda di ' . $laporan->lokasi . ' telah diverifikasi.'
+                : 'Laporan Anda di ' . $laporan->lokasi . ' ditolak. Alasan: ' . $request->alasan,
+            'tanggal'    => now()->toDateString(),
+        ]);
+    });
+
+    return redirect()->back()->with('success', $diverifikasi
+        ? 'Laporan berhasil diverifikasi.'
+        : 'Laporan berhasil ditolak.');
+}}
