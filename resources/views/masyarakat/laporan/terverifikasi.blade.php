@@ -8,81 +8,60 @@
     </div>
 </div>
 
-<div class="card">
-    <div class="toolbar">
-        <div class="search-box">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="11" cy="11" r="7"/>
-                <path d="M21 21l-4.3-4.3"/>
-            </svg>
-            <input type="text" placeholder="Cari laporan berdasarkan lokasi atau penyakit...">
+<div class="card p-4">
+    <!-- Baris Pencarian (Opsional, Biarkan Statis Dulu Sesuai Desain) -->
+    <div class="d-flex justify-content-between mb-4">
+        <div class="input-group" style="max-width: 600px;">
+            <span class="input-group-text bg-light border-end-0"><i class="bi bi-search"></i></span>
+            <input type="text" class="form-control border-start-0 bg-light" placeholder="Cari laporan berdasarkan lokasi atau penyakit...">
         </div>
-        <button class="btn btn-outline btn-sm">
-            Filter
-        </button>
+        <button class="btn btn-outline-danger px-4 rounded-pill">Filter</button>
     </div>
 
-    <div class="table-wrap">
-        <table>
-            <thead>
+    <!-- Tabel Dinamis -->
+    <div class="table-responsive">
+        <table class="table table-borderless align-middle" style="width: 100%;">
+            <thead style="border-bottom: 1px solid #eaeaea;">
                 <tr>
-                    <th>Tanggal</th>
-                    <th>Lokasi</th>
-                    <th>Jenis Penyakit</th>
-                    <th>Gejala</th>
-                    <th>Status</th>
-                    <th></th>
+                    <th class="text-muted pb-3" style="font-weight: 500;">Tanggal</th>
+                    <th class="text-muted pb-3" style="font-weight: 500;">Lokasi</th>
+                    <th class="text-muted pb-3" style="font-weight: 500;">Jenis Penyakit</th>
+                    <th class="text-muted pb-3" style="font-weight: 500;">Gejala</th>
+                    <th class="text-muted pb-3" style="font-weight: 500;">Status</th>
+                    <th class="text-muted pb-3" style="font-weight: 500;"></th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>2026-06-03</td>
-                    <td>Jl. Merdeka No. 45</td>
-                    <td>DBD</td>
-                    <td>Demam tinggi, sakit kepala</td>
-                    <td>
-                        <span class="badge badge-success">
+                @forelse($laporan as $item)
+                <tr style="border-bottom: 1px solid #f4f4f4;">
+                    <!-- Format Tanggal -->
+                    <td class="py-3">{{ \Carbon\Carbon::parse($item->tanggal)->format('Y-m-d') }}</td>
+                    
+                    <td class="py-3">{{ $item->lokasi }}</td>
+                    
+                    <!-- Menggunakan deskripsi karena tidak ada kolom jenis_penyakit di migrasi Anda -->
+                    <td class="py-3">{{ \Illuminate\Support\Str::limit($item->deskripsi, 20) }}</td>
+                    
+                    <td class="py-3">{{ \Illuminate\Support\Str::limit($item->gejala, 40) }}</td>
+                    
+                    <td class="py-3">
+                        <span class="badge" style="background: #e6f8ec; color: #15803d; padding: 6px 12px; border-radius: 20px; font-weight: 500;">
                             Terverifikasi
                         </span>
                     </td>
-                    <td>
-                        <a href="#" style="color:var(--primary);font-weight:600;">
-                            Detail
-                        </a>
+                    
+                    <!-- Arahkan ke route detail laporan (sesuaikan jika route-nya berbeda) -->
+                    <td class="py-3 text-end">
+                        <a href="#" style="color: #dc2626; text-decoration: none; font-weight: 600;">Detail</a>
                     </td>
                 </tr>
+                @empty
                 <tr>
-                    <td>2026-05-30</td>
-                    <td>Jl. Ahmad Yani No. 78</td>
-                    <td>DBD</td>
-                    <td>Demam, mual, bintik merah</td>
-                    <td>
-                        <span class="badge badge-success">
-                            Terverifikasi
-                        </span>
-                    </td>
-                    <td>
-                        <a href="#" style="color:var(--primary);font-weight:600;">
-                            Detail
-                        </a>
+                    <td colspan="6" class="text-center py-4 text-muted">
+                        Belum ada laporan yang diverifikasi.
                     </td>
                 </tr>
-                <tr>
-                    <td>2026-05-28</td>
-                    <td>Jl. Diponegoro No. 23</td>
-                    <td>Malaria</td>
-                    <td>Demam berkala, menggigil</td>
-                    <td>
-                        <span class="badge badge-success">
-                            Terverifikasi
-                        </span>
-                    </td>
-                    <td>
-                        <a href="#" style="color:var(--primary);font-weight:600;">
-                            Detail
-                        </a>
-                    </td>
-                </tr>
+                @endforelse
             </tbody>
         </table>
     </div>

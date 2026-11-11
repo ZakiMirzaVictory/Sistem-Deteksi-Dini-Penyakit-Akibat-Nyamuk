@@ -123,11 +123,18 @@ class DashboardController extends Controller
     }
 
     public function laporanTerverifikasi()
-    {
-        return view('masyarakat.laporan.terverifikasi', [
-            'pageTitle' => 'Laporan Terverifikasi — Deteksi Dini Nyamuk',
-            'role' => 'masyarakat',
-            'activePage' => 'laporan-terverifikasi'
-        ]);
-    }
+{
+    // Mengambil laporan milik user yang sedang login khusus dengan status 'terverifikasi'
+    $laporanTerverifikasi = Laporan::where('id_user', Auth::id())
+                                   ->where('status', 'terverifikasi')
+                                   ->orderBy('tanggal', 'desc')
+                                   ->get();
+
+    return view('masyarakat.laporan.terverifikasi', [
+        'pageTitle' => 'Laporan Terverifikasi — Masyarakat',
+        'role' => 'masyarakat',
+        'activePage' => 'laporan-terverifikasi',
+        'laporan' => $laporanTerverifikasi // Mengirim data ke tampilan blade
+    ]);
+}
 }
