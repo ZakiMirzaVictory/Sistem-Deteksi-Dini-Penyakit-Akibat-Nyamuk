@@ -7,6 +7,7 @@ use App\Models\Pengguna;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Laporan;
 use App\Models\Notifikasi;
+use App\Models\RiwayatPenanganan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
